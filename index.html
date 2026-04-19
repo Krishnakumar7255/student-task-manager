@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Study Task Tracker</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Task Tracker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>📚 Study Task Tracker</h1>
+        
+       <div class="input-section">
+            <input type="text" id="taskInput" placeholder="What are you studying?">
+           
+              <span> 
+        
+            <select id="categoryInput">
+                <option value="Theory">📘 Theory</option>
+                <option value="Practical">💻 Practical</option>
+                <option value="Revision">🔄 Revision</option>
+                <option value="Assignment">📝 Assignment</option>
+            </select>
+            <button id="addBtn" onclick="addTask()">Add Task</button>
+             </span>
+    
+       
+            </div>
 
-  <div class="container">
-    <h1>📚 Study Task Tracker</h1>
-
-    <input type="text" id="taskInput" placeholder="Enter task">
-    <button onclick="addTask()">Add</button>
-
-    <ul id="taskList"></ul>
-  </div>
-
-  <script src="script.js"></script>
+        <ul id="taskList">
+            </ul>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
