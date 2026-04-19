@@ -9,8 +9,17 @@ function addTask() {
   };
   errorMsg.textContent = "";
   const li = document.createElement("li");
+
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.addEventListener("change", function () {
+    toggleTask(checkbox);
+  });
+
   const span = document.createElement("span");
   span.textContent = task;
+
   const now = new Date();
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const day = dayNames[now.getDay()];
@@ -20,6 +29,7 @@ function addTask() {
   timeElement.textContent = ` (${day}, ${date} at ${time})`;
   timeElement.style.marginLeft = "10px";
   timeElement.style.color = "#888";
+
 
   const editButton = document.createElement("button");
     editButton.textContent = "Edit";
@@ -37,10 +47,19 @@ function addTask() {
   removeButton.addEventListener("click", function () {
     li.remove();
   });
+
+
+
+  li.appendChild(checkbox);
+  li.appendChild(span);
+
+
   li.appendChild(removeButton);
+
   document.getElementById("taskList").appendChild(li);
   
   input.value = "";
+
 }
 function toggleTheme() {
   const body = document.body;
@@ -65,3 +84,32 @@ window.onload = function () {
     document.getElementById("themeToggle").textContent = "☀️ Light Mode";
   }
 };
+=======
+
+  updateUI();
+}
+
+function toggleTask(checkbox) {
+  const span = checkbox.nextElementSibling;
+  span.classList.toggle("completed");
+
+  taskTracker();
+}
+
+
+function taskTracker() {
+  const tasks = document.querySelectorAll("#taskList li");
+  const completed = document.querySelectorAll("#taskList input:checked");
+
+  const empty = document.getElementById("emptyState");
+  if (empty) {
+    empty.style.display = tasks.length === 0 ? "block" : "none";
+  }
+
+  const stats = document.getElementById("taskStats");
+  if (stats) {
+    stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
+  }
+}
+
+}
