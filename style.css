@@ -109,11 +109,11 @@ a:hover {
 
 /* ===== Footer ===== */
 .site-footer {
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+  margin: 30px;
   border-top: 1px solid #334155;
-  color: #94a3b8;
+  color: rgb(0, 0, 0);
+  padding-top: 10px;
+  padding-bottom: 100px;
 }
 
 /* ===== Navigation Links ===== */
@@ -213,6 +213,12 @@ li span{
   bottom: 0%;
   height: 10%;
   width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.site-footer a{
+  background-color: #aeb7c4;
 }
 
 .site-footer nav {
