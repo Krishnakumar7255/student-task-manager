@@ -1,8 +1,9 @@
 body {
   font-family: Arial, sans-serif;
   background: #f4f4f4;
-  margin: 0;
+  margin: 5px;
   color: #222;
+
 }
 
 .skip-link {
@@ -208,6 +209,7 @@ li span{
 .site-footer {
   border-top: 1px solid #ddd;
   background: #f9fafb;
+  border: 2px solid #1d4ed8;
   text-align: center;
   position: fixed;
   bottom: 0%;
@@ -215,6 +217,7 @@ li span{
   width: 100%;
   margin-left: 10px;
   margin-right: 10px;
+  display: flexbox;
 }
 
 .site-footer a{
@@ -232,6 +235,7 @@ li span{
 .site-footer a {
   color: #1d4ed8;
   text-decoration: none;
+  background: none;
 }
 
 .site-footer a:hover,
@@ -257,13 +261,14 @@ li span{
 }
 body.dark-mode {
   background: #121212;
-  color: #eee;
+  color: whitesmoke;
+  font-size: medium;
 }
 
 body.dark-mode .site-header,
 body.dark-mode .site-footer {
-  background: #1e1e1e;
-  border-color: #333;
+  background: transparent;
+  border-color: greenyellow;
 }
 
 body.dark-mode input {
@@ -285,5 +290,18 @@ body.dark-mode button:hover {
 }
 
 body.dark-mode a {
-  color: #93c5fd;
+  color: greenyellow;
+  display: flex;
+  background: transparent;
+}
+
+body.dark-mode #revi{
+  color: whitesmoke;
+  margin: 5px;
+  display: flex;
+}
+
+body #revi{
+  height:30px ;
+  display: flexbox;
 }

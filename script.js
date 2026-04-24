@@ -83,11 +83,9 @@ window.onload = function () {
     document.body.classList.add("dark-mode");
     document.getElementById("themeToggle").textContent = "☀️ Light Mode";
   }
-};
-=======
 
   updateUI();
-}
+};
 
 function toggleTask(checkbox) {
   const span = checkbox.nextElementSibling;
@@ -110,6 +108,4 @@ function taskTracker() {
   if (stats) {
     stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
   }
-}
-
-}
+};
