@@ -1,115 +1,117 @@
-function addTask() {
-  const input = document.getElementById("taskInput");
-  const task = input.value.trim();
-  const errorMsg = document.getElementById("errorMsg");
+// 1. Data State: Load from storage or initialize empty
+let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
 
-  if (task.trim()=== "") {
-    errorMsg.textContent = " Please enter a task.";
-    return;
-  };
-  errorMsg.textContent = "";
-  const li = document.createElement("li");
-
-
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.addEventListener("change", function () {
-    toggleTask(checkbox);
-  });
-
-  const span = document.createElement("span");
-  span.textContent = task;
-
-  const now = new Date();
-  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const day = dayNames[now.getDay()];
-  const date =`${now.getDate()} ${now.toLocaleString("default", { month: "long" })} ${now.getFullYear()}`;
-  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  const timeElement = document.createElement("small");
-  timeElement.textContent = ` (${day}, ${date} at ${time})`;
-  timeElement.style.marginLeft = "10px";
-  timeElement.style.color = "#888";
-
-
-  const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", function () {
-      const newTask = prompt("Edit task:", span.textContent);
-      if (newTask !== null) {
-        span.textContent = newTask;
-      }
-    });
-    li.appendChild(span);
-    li.appendChild(timeElement);
-    li.appendChild(editButton);
-  const removeButton = document.createElement("button");
-  removeButton.textContent = "Remove";
-  removeButton.addEventListener("click", function () {
-    li.remove();
-  });
-
-
-
-  li.appendChild(checkbox);
-  li.appendChild(span);
-
-
-  li.appendChild(removeButton);
-
-  document.getElementById("taskList").appendChild(li);
-  
-  input.value = "";
-
-}
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById("themeToggle");
-
-  body.classList.toggle("dark-mode");
-
-  if (body.classList.contains("dark-mode")) {
-    btn.textContent = "☀️ Light Mode";
-    localStorage.setItem("theme", "dark");
-  } else {
-    btn.textContent = "🌙 Dark Mode";
-    localStorage.setItem("theme", "light");
-  }
-}
-
+// 2. Initialize the App
 window.onload = function () {
-  const savedTheme = localStorage.getItem("theme");
-
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    document.getElementById("themeToggle").textContent = "☀️ Light Mode";
-  }
+    // Render the tasks first
+    renderTasks();
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        const btn = document.getElementById("themeToggle");
+        if (btn) btn.textContent = "☀️ Light Mode";
+    }
 };
-=======
 
-  updateUI();
+/**
+ * ADDS A NEW TASK
+ * Merges Categorization with the maintainer's Error Handling
+ */
+function addTask() {
+    const input = document.getElementById("taskInput");
+    const category = document.getElementById("categoryInput");
+    const errorMsg = document.getElementById("errorMsg");
+
+    // Clean validation
+    if (input.value.trim() === "") {
+        if (errorMsg) errorMsg.textContent = "⚠️ Please enter a task.";
+        return;
+    }
+    if (errorMsg) errorMsg.textContent = "";
+
+    // Create the task object
+    const newTask = {
+        id: Date.now(),
+        text: input.value,
+        category: category.value,
+        completed: false,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    };
+
+    tasks.push(newTask);
+    saveAndRender();
+    input.value = ""; // Clear input
 }
 
-function toggleTask(checkbox) {
-  const span = checkbox.nextElementSibling;
-  span.classList.toggle("completed");
-
-  taskTracker();
+/**
+ * STATE MANAGEMENT FUNCTIONS
+ */
+function toggleTask(id) {
+    tasks = tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+    );
+    saveAndRender();
 }
 
-
-function taskTracker() {
-  const tasks = document.querySelectorAll("#taskList li");
-  const completed = document.querySelectorAll("#taskList input:checked");
-
-  const empty = document.getElementById("emptyState");
-  if (empty) {
-    empty.style.display = tasks.length === 0 ? "block" : "none";
-  }
-
-  const stats = document.getElementById("taskStats");
-  if (stats) {
-    stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
-  }
+function deleteTask(id) {
+    tasks = tasks.filter((task) => task.id !== id);
+    saveAndRender();
 }
 
+function saveAndRender() {
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
+    renderTasks();
+    updateStats();
+}
+
+/**
+ * UI RENDERING
+ */
+function renderTasks() {
+    const list = document.getElementById("taskList");
+    if (!list) return;
+    
+    list.innerHTML = "";
+
+    tasks.forEach((task) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <div class="task-content">
+                <input type="checkbox" ${task.completed ? "checked" : ""} onchange="toggleTask(${task.id})">
+                <span class="badge">${task.category}</span>
+                <span class="task-text ${task.completed ? "completed" : ""}">${task.text}</span>
+                <small style="color: #888; margin-left: 5px;">${task.timestamp || ''}</small>
+            </div>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
+        `;
+        list.appendChild(li);
+    });
+}
+
+function updateStats() {
+    const stats = document.getElementById("taskStats");
+    const completedCount = tasks.filter(t => t.completed).length;
+    if (stats) {
+        stats.innerText = `✅ ${completedCount} / ${tasks.length} completed`;
+    }
+}
+
+/**
+ * THEME TOGGLE (Maintainer's Feature)
+ */
+function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById("themeToggle");
+
+    body.classList.toggle("dark-mode");
+
+    if (body.classList.contains("dark-mode")) {
+        btn.textContent = "☀️ Light Mode";
+        localStorage.setItem("theme", "dark");
+    } else {
+        btn.textContent = "🌙 Dark Mode";
+        localStorage.setItem("theme", "light");
+    }
 }
