@@ -3,97 +3,95 @@ function addTask() {
   const task = input.value.trim();
   const errorMsg = document.getElementById("errorMsg");
 
-  if (task.trim()=== "") {
-    errorMsg.textContent = " Please enter a task.";
+  if (task === "") {
+    errorMsg.textContent = "Please enter a task.";
     return;
-  };
+  }
+
   errorMsg.textContent = "";
+
   const li = document.createElement("li");
 
-
+  // Checkbox
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.addEventListener("change", function () {
     toggleTask(checkbox);
   });
 
+  // Task text
   const span = document.createElement("span");
   span.textContent = task;
 
+  // Time
   const now = new Date();
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const day = dayNames[now.getDay()];
-  const date =`${now.getDate()} ${now.toLocaleString("default", { month: "long" })} ${now.getFullYear()}`;
+  const date = `${now.getDate()} ${now.toLocaleString("default", { month: "long" })} ${now.getFullYear()}`;
   const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
   const timeElement = document.createElement("small");
   timeElement.textContent = ` (${day}, ${date} at ${time})`;
   timeElement.style.marginLeft = "10px";
   timeElement.style.color = "#888";
 
-
+  // Edit button
   const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", function () {
-      const newTask = prompt("Edit task:", span.textContent);
-      if (newTask !== null) {
-        span.textContent = newTask;
-      }
-    });
-    li.appendChild(span);
-    li.appendChild(timeElement);
-    li.appendChild(editButton);
+  editButton.textContent = "Edit";
+  editButton.addEventListener("click", function () {
+    const newTask = prompt("Edit task:", span.textContent);
+    if (newTask !== null && newTask.trim() !== "") {
+      span.textContent = newTask.trim();
+    }
+  });
+
+  // Remove button
   const removeButton = document.createElement("button");
   removeButton.textContent = "Remove";
   removeButton.addEventListener("click", function () {
     li.remove();
+    taskTracker();
   });
 
-
-
+  // Append in correct order
   li.appendChild(checkbox);
   li.appendChild(span);
-
-
+  li.appendChild(timeElement);
+  li.appendChild(editButton);
   li.appendChild(removeButton);
 
   document.getElementById("taskList").appendChild(li);
-  
+
   input.value = "";
-
-}
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById("themeToggle");
-
-  body.classList.toggle("dark-mode");
-
-  if (body.classList.contains("dark-mode")) {
-    btn.textContent = "☀️ Light Mode";
-    localStorage.setItem("theme", "dark");
-  } else {
-    btn.textContent = "🌙 Dark Mode";
-    localStorage.setItem("theme", "light");
-  }
-}
-
-window.onload = function () {
-  const savedTheme = localStorage.getItem("theme");
-
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    document.getElementById("themeToggle").textContent = "☀️ Light Mode";
-  }
-
-  updateUI();
-};
-
-function toggleTask(checkbox) {
-  const span = checkbox.nextElementSibling;
-  span.classList.toggle("completed");
 
   taskTracker();
 }
 
+/* =========================
+   MULTI-THEME SWITCHER
+========================= */
+
+const themeSwitcher = document.getElementById("themeSwitcher");
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.setAttribute("data-theme", savedTheme);
+
+if (themeSwitcher) {
+  themeSwitcher.value = savedTheme;
+
+  themeSwitcher.addEventListener("change", function (e) {
+    const selectedTheme = e.target.value;
+    document.documentElement.setAttribute("data-theme", selectedTheme);
+    localStorage.setItem("theme", selectedTheme);
+  });
+}
+
+function toggleTask(checkbox) {
+  const span = checkbox.nextElementSibling;
+  span.classList.toggle("completed");
+  taskTracker();
+}
 
 function taskTracker() {
   const tasks = document.querySelectorAll("#taskList li");
@@ -108,4 +106,4 @@ function taskTracker() {
   if (stats) {
     stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
   }
-};
+}

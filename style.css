@@ -1,49 +1,6 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  margin: 5px;
-  color: #222;
-
-}
-
-.skip-link {
-  position: absolute;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  width: auto;
-  height: auto;
-  padding: 0.75rem 1rem;
-  background: #333;
-  color: #fff;
-  z-index: 1000;
-}
-
-.site-header,
-.site-footer {
-  padding: 1rem;
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-}
-
-.site-header {
-  text-align: center;
-}
-
-.container {
-  max-width: 520px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-/* ===== Global Reset ===== */
+/* =========================
+   GLOBAL RESET
+========================= */
 * {
   margin: 0;
   padding: 0;
@@ -52,17 +9,39 @@ body {
 }
 
 body {
-  background: #0f172a;
-  color: #e2e8f0;
+  background: var(--bg-color, #0f172a);
+  color: var(--text-color, #e2e8f0);
   line-height: 1.6;
+  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
+  /* background-attachment: fixed; */
 }
 
-/* ===== Header ===== */
+/* =========================
+   ACCESSIBILITY
+========================= */
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #333;
+  color: #fff;
+  z-index: 1000;
+}
+
+/* =========================
+   HEADER
+========================= */
 .site-header {
   padding: 24px;
   text-align: center;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  border-bottom: 1px solid #334155;
+  background: var(--header-bg, #1e293b);
+  border-bottom: 1px solid var(--border-color, #334155);
 }
 
 .site-header h1 {
@@ -70,19 +49,23 @@ body {
   font-weight: 600;
 }
 
-/* ===== Container ===== */
+/* =========================
+   CONTAINER
+========================= */
 .container {
   max-width: 850px;
   margin: 40px auto;
   padding: 30px;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid #334155;
+  background: var(--card-bg, #1e293b);
+  border: 1px solid var(--border-color, #334155);
   border-radius: 16px;
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* ===== Headings ===== */
+/* =========================
+   TEXT
+========================= */
 .container h2 {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -90,13 +73,14 @@ body {
   font-size: 1.2rem;
 }
 
-/* ===== Paragraphs ===== */
 .container p {
   margin-bottom: 12px;
   color: #cbd5e1;
 }
 
-/* ===== Links ===== */
+/* =========================
+   LINKS
+========================= */
 a {
   color: #38bdf8;
   text-decoration: none;
@@ -108,16 +92,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== Footer ===== */
-.site-footer {
-  margin: 30px;
-  border-top: 1px solid #334155;
-  color: rgb(0, 0, 0);
-  padding-top: 10px;
-  padding-bottom: 100px;
-}
-
-/* ===== Navigation Links ===== */
+/* =========================
+   NAVIGATION
+========================= */
 nav {
   display: flex;
   gap: 15px;
@@ -128,18 +105,20 @@ nav {
 
 nav a {
   padding: 6px 12px;
-  border: 1px solid #334155;
+  border: 1px solid var(--border-color, #334155);
   border-radius: 8px;
-  background: #1e293b;
+  background: var(--card-bg, #1e293b);
 }
 
-/* Hover effect */
 nav a:hover {
   background: #2563eb;
   border-color: #2563eb;
-  color: white;
+  color: #fff;
 }
 
+/* =========================
+   FORM
+========================= */
 form {
   display: grid;
   gap: 0.75rem;
@@ -148,25 +127,27 @@ form {
 
 label {
   font-weight: bold;
-  text-align: left;
-  display: block;
 }
 
 input {
   padding: 0.9rem;
   width: 100%;
-  max-width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px;
 }
 
+/* =========================
+   BUTTONS
+========================= */
 button {
   padding: 0.9rem 1.25rem;
   border: none;
-  background: #3b82f6;
+  background: var(--button-bg, #3b82f6);
   color: #fff;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: 0.2s;
+  margin: 1rem;
 }
 
 button:hover,
@@ -176,52 +157,50 @@ button:focus {
   outline-offset: 2px;
 }
 
+/* =========================
+   TASK LIST
+========================= */
 ul {
-  padding: 0;
-  margin: 0;
+  list-style: none;
 }
 
 li {
-  list-style: none;
   margin: 0.75rem 0;
   padding: 0.9rem;
-  background: #fff;
-  color: #222;
-  border-radius: 5px;
+  background: var(--card-bg, #1e293b);
+  border-radius: 8px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  color: var(--text-color, #e2e8f0);
 }
 
 li input[type="checkbox"] {
-  margin: 0px;
-  padding: 0px;
-  width: 1.25rem;
+  width: 1.2rem;
 }
 
-li span{
+li span {
   flex: 1;
-  margin-left: 0rem;
-  padding-left: 0.5rem;
-  width: 14.25rem;
 }
 
+/* Completed Task */
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* =========================
+   FOOTER
+========================= */
 .site-footer {
-  border-top: 1px solid #ddd;
-  background: #f9fafb;
-  border: 2px solid #1d4ed8;
+  border-top: 1px solid var(--border-color, #334155);
+  background: var(--header-bg, #1e293b);
   text-align: center;
+  padding: 12px;
   position: fixed;
-  bottom: 0%;
-  height: 10%;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  margin-left: 10px;
-  margin-right: 10px;
-  display: flexbox;
-}
-
-.site-footer a{
-  background-color: #aeb7c4;
 }
 
 .site-footer nav {
@@ -229,79 +208,76 @@ li span{
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 0.75rem;
 }
 
 .site-footer a {
-  color: #1d4ed8;
-  text-decoration: none;
-  background: none;
+  color: #60a5fa;
 }
 
-.site-footer a:hover,
-.site-footer a:focus {
+.site-footer a:hover {
   text-decoration: underline;
 }
 
+/* =========================
+   ERROR
+========================= */
 .error {
-  color: #b91c1c;
+  color: #ef4444;
   margin-top: 0.25rem;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-body.dark-mode {
-  background: #121212;
-  color: whitesmoke;
-  font-size: medium;
+/* =========================
+   THEME DROPDOWN
+========================= */
+.theme-dropdown {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-body.dark-mode .site-header,
-body.dark-mode .site-footer {
-  background: transparent;
-  border-color: greenyellow;
+/* =========================
+   THEMES
+========================= */
+
+/* Light */
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #222;
+  --card-bg: #ffffff;
+  --header-bg: #f9fafb;
+  --border-color: #ddd;
+  --button-bg: #3b82f6;
 }
 
-body.dark-mode input {
-  background: #2a2a2a;
-  color: #fff;
-  border: 1px solid #444;
+/* Dark */
+[data-theme="dark"] {
+  --bg-color: #0f172a;
+  --text-color: #e2e8f0;
+  --card-bg: #1e293b;
+  --header-bg: #1e293b;
+  --border-color: #334155;
+  --button-bg: #6366f1;
 }
 
-body.dark-mode li {
-  background: #1f1f1f;
+/* Blue */
+[data-theme="blue"] {
+  --bg-color: #e0f2fe;
+  --text-color: #0c4a6e;
+  --card-bg: #bae6fd;
+  --header-bg: #7dd3fc;
+  --border-color: #38bdf8;
+  --button-bg: #0ea5e9;
 }
 
-body.dark-mode button {
-  background: #6366f1;
-}
-
-body.dark-mode button:hover {
-  background: #4f46e5;
-}
-
-body.dark-mode a {
-  color: greenyellow;
-  display: flex;
-  background: transparent;
-}
-
-body.dark-mode #revi{
-  color: whitesmoke;
-  margin: 5px;
-  display: flex;
-}
-
-body #revi{
-  height:30px ;
-  display: flexbox;
+/* Pastel */
+[data-theme="pastel"] {
+  --bg-color: #fdf2f8;
+  --text-color: #4b5563;
+  --card-bg: #fce7f3;
+  --header-bg: #e9d5ff;
+  --border-color: #c4b5fd;
+  --button-bg: #a5b4fc;
 }
