@@ -10,6 +10,14 @@ function addTask() {
   errorMsg.textContent = "";
 
   const li = document.createElement("li");
+
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.addEventListener("change", function () {
+    toggleTask(checkbox);
+  });
+
   const span = document.createElement("span");
   span.textContent = task;
 
@@ -23,6 +31,7 @@ function addTask() {
   timeElement.textContent = ` (${day}, ${date} at ${time})`;
   timeElement.style.marginLeft = "10px";
   timeElement.style.color = "#888";
+
 
   const editButton = document.createElement("button");
   editButton.textContent = "Edit";
@@ -51,10 +60,15 @@ function addTask() {
     li.remove();
   });
 
+  li.appendChild(checkbox);
+  li.appendChild(span);
+
   li.appendChild(removeButton);
+
   document.getElementById("taskList").appendChild(li);
 
   input.value = "";
+
 }
 
 function toggleTheme() {
@@ -70,14 +84,48 @@ function toggleTheme() {
     btn.textContent = "🌙 Dark Mode";
     localStorage.setItem("theme", "light");
   }
+/* =========================
+   MULTI-THEME SWITCHER
+========================= */
+
+const themeSwitcher = document.getElementById("themeSwitcher");
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme") || "light";
+document.documentElement.setAttribute("data-theme", savedTheme);
+
+if (themeSwitcher) {
+  themeSwitcher.value = savedTheme;
+
+  themeSwitcher.addEventListener("change", function (e) {
+    const selectedTheme = e.target.value;
+
+    document.documentElement.setAttribute("data-theme", selectedTheme);
+    localStorage.setItem("theme", selectedTheme);
+  });
 }
 
-window.onload = function () {
-  const savedTheme = localStorage.getItem("theme");
+function toggleTask(checkbox) {
+  const span = checkbox.nextElementSibling;
+  span.classList.toggle("completed");
 
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    document.getElementById("themeToggle").textContent = "☀️ Light Mode";
+  taskTracker();
+
+}
+
+
+function taskTracker() {
+  const tasks = document.querySelectorAll("#taskList li");
+  const completed = document.querySelectorAll("#taskList input:checked");
+
+  const empty = document.getElementById("emptyState");
+  if (empty) {
+    empty.style.display = tasks.length === 0 ? "block" : "none";
+  }
+
+  const stats = document.getElementById("taskStats");
+  if (stats) {
+    stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
   }
 };
 function sortTasks(order) {
@@ -96,4 +144,6 @@ function sortTasks(order) {
   });
 
   tasks.forEach(task => taskList.appendChild(task));
+}
+
 }
