@@ -41,6 +41,27 @@
         <p>&copy; 2026 Study Task Tracker</p>
     </footer>
 
+    <p id="errorMsg" class="error" role="alert"></p>
+    <div style="margin-bottom: 10px;">
+  <button onclick="sortTasks('asc')">A to Z</button>
+  <button onclick="sortTasks('desc')">Z to A</button>
+</div>
+    <ul id="taskList" aria-live="polite" aria-label="Task list"></ul>
+  </main>
+
+  <footer class="site-footer">
+    <nav aria-label="Footer navigation">
+      <a href="#taskInput">Add task</a>
+      <a href="#taskList">View tasks</a>
+      <a href="#main-content">Back to top</a>
+    </nav>
+    <p>Accessible study tracking with keyboard support and semantic structure.</p>
+    <p>&copy; 2026 Study Task Tracker</p>
+  </footer>
+
+  <script src="script.js"></script>
+
     <script src="script.js"></script>
+
 </body>
 </html>
