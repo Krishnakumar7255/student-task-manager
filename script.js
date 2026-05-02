@@ -50,7 +50,13 @@ function addTask() {
   removeButton.textContent = "Remove";
   removeButton.addEventListener("click", function () {
     li.remove();
+ 
     taskTracker();
+
+
+    taskTracker();
+    
+
   });
 
   // Append in correct order
@@ -65,6 +71,10 @@ function addTask() {
   input.value = "";
 
   taskTracker();
+ 
+
+
+ 
 }
 
 /* =========================
@@ -106,4 +116,21 @@ function taskTracker() {
   if (stats) {
     stats.innerText = `✅ ${completed.length} / ${tasks.length} completed`;
   }
+
 }
+
+
+  const celebration = document.getElementById("celebration");
+
+  if (tasks.length > 0 && tasks.length === completed.length) {
+    celebration.classList.remove("hidden");
+
+    setTimeout(() => {
+      celebration.classList.add("show");
+    }, 100);
+  } else {
+    celebration.classList.remove("show");
+    celebration.classList.add("hidden");
+  }
+}
+ 
