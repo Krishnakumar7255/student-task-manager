@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeSwitcher = document.getElementById('themeSwitcher');
     const emptyState = document.getElementById('emptyState');
     const celebration = document.getElementById('celebration');
+    const closeCelebration = document.getElementById('closeCelebration');
 
     // State
     let tasks = JSON.parse(localStorage.getItem('nexus_tasks')) || [];
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
 
     function init() {
-        renderTasks();
+        if (taskList) renderTasks();
         setupTheme();
         attachEventListeners();
     }
@@ -37,30 +38,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function attachEventListeners() {
         // Add Task
-        taskForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            addTask();
-        });
+        if (taskForm) {
+            taskForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                addTask();
+            });
+        }
 
         // Theme Switcher
-        themeSwitcher.addEventListener('change', (e) => {
-            const theme = e.target.value;
-            document.body.setAttribute('data-theme', theme);
-            localStorage.setItem('nexus_theme', theme);
-        });
+        if (themeSwitcher) {
+            themeSwitcher.addEventListener('change', (e) => {
+                const theme = e.target.value;
+                document.body.setAttribute('data-theme', theme);
+                localStorage.setItem('nexus_theme', theme);
+            });
+        }
 
         // Search
-        searchInput.addEventListener('input', (e) => {
-            renderTasks(e.target.value);
-        });
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                renderTasks(e.target.value);
+            });
+        }
 
         // Clear All
-        clearAllBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all tasks?')) {
-                tasks = [];
-                saveAndRender();
-            }
-        });
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all tasks?')) {
+                    tasks = [];
+                    saveAndRender();
+                }
+            });
+        }
+
+        // Close Celebration
+        if (closeCelebration) {
+            closeCelebration.addEventListener('click', () => {
+                celebration.classList.remove('show');
+                setTimeout(() => celebration.classList.add('hidden'), 500); // Wait for transition
+            });
+        }
     }
 
     function addTask() {
@@ -172,16 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const completedCount = tasks.filter(t => t.completed).length;
         const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
 
-        taskStatsText.textContent = `✅ ${completedCount} / ${total} completed (${percent}%)`;
-        progressBar.style.width = `${percent}%`;
+        if (taskStatsText) taskStatsText.textContent = `✅ ${completedCount} / ${total} completed (${percent}%)`;
+        if (progressBar) progressBar.style.width = `${percent}%`;
 
         // Celebration logic
-        if (total > 0 && total === completedCount) {
-            celebration.classList.remove('hidden');
-            celebration.classList.add('show');
-        } else {
-            celebration.classList.remove('show');
-            celebration.classList.add('hidden');
+        if (celebration) {
+            if (total > 0 && total === completedCount) {
+                celebration.classList.remove('hidden');
+                celebration.classList.add('show');
+            } else {
+                celebration.classList.remove('show');
+                celebration.classList.add('hidden');
+            }
         }
     }
 
