@@ -1,153 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Study Task Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
+
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-header">
     <div class="header-inner">
-      <div class="header-brand">
-        <h1>📚 Study Task Tracker</h1>
-        <p class="header-subtitle">
-          <span id="headerGreeting">👋 Focus Time!</span>
-          <span class="subtitle-divider">•</span>
-          <span id="headerDate">Sun, May 17</span>
-        </p>
+      <div>
+       
+
+        <p class="eyebrow"> Academic planner</p>
+        <h1><img src="favicon.png" alt="icon" width="32" height="32">Study Task Tracker</h1>
+        <p class="header-subtitle">Track study work, filter by topic, and keep momentum visible.</p>
       </div>
-      <div class="header-controls">
-        <div class="stats-pill">
-          <span class="stats-pill-label">Progress</span>
-          <span id="headerStats" class="stats-pill-value">🎯 0%</span>
-        </div>
-        <div class="theme-pill">
-          <span class="theme-pill-label">Theme</span>
-          <select id="themeSwitcher" class="theme-dropdown" aria-label="Switch Theme">
-            <option value="light">🌞 Light</option>
-            <option value="dark" selected>🌙 Dark</option>
-            <option value="blue">🩵 Blue</option>
-            <option value="pastel">🎀 Pastel</option>
-          </select>
-        </div>
-      </div>
+
+      <label class="theme-control" for="themeSwitcher">
+        <span class="theme-control-label">Theme</span>
+        <select id="themeSwitcher" class="theme-dropdown" aria-label="Theme selector">
+          <option value="light">☀️ Light</option>
+          <option value="dark">🌙Dark</option>
+          <option value="blue">🩵Blue</option>
+          <option value="pastel">🎀Pastel</option>
+        </select>
+      </label>
+      
+
     </div>
   </header>
 
   <main id="main-content" class="container">
-    <div class="dashboard-grid">
-      <!-- Left Column: Workspace Card -->
-      <section class="workspace-card glass-card" aria-labelledby="workspace-title">
-        <h2 id="workspace-title" class="sr-only">Study Workspace</h2>
+    <section class="form-section" aria-labelledby="add-task-heading">
+      <form id="taskForm" class="task-form">
+        <div class="form-group">
+          <label id="add-task-heading" for="taskInput">Add a new task</label>
+          <div class="input-row">
+            <input type="text" id="taskInput" placeholder="Enter task description" aria-describedby="taskHelp">
+            <button type="submit" class="btn-primary" id="addBtn">Add Task</button>
+          </div>
+          <p id="taskHelp" class="sr-only">Type a task and press Add Task or Enter.</p>
+        </div>
+
+        <div class="controls">
+          <select id="categoryInput" aria-label="Task category">
+            <option value="Theory">Theory</option>
+            <option value="Practical">Practical</option>
+            <option value="Revision">Revision</option>
+            <option value="Assignment">Assignment</option>
+          </select>
+        </div>
+      </form>
+      <p id="errorMsg" class="error" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section class="toolbar" aria-label="Task tools">
+      <div class="sort-controls" aria-label="Sort tasks">
+        <button type="button" id="sortAscBtn">A to Z</button>
+        <button type="button" id="sortDescBtn">Z to A</button>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="search" id="searchInput" placeholder="Search tasks" aria-label="Search tasks">
+      </div>
+
+      <div class="filter-buttons" id="filterButtons" aria-label="Filter tasks">
+        <button type="button" class="filter-btn active" data-filter="all">All</button>
+        <button type="button" class="filter-btn" data-filter="active">Active</button>
+        <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+        <button type="button" class="filter-btn" data-filter="Theory">Theory</button>
+        <button type="button" class="filter-btn" data-filter="Practical">Practical</button>
+        <button type="button" class="filter-btn" data-filter="Revision">Revision</button>
+        <button type="button" class="filter-btn" data-filter="Assignment">Assignment</button>
+      </div>
+    </section>
+
+    <section class="tasks-section" aria-labelledby="tasks-heading">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Your list</p>
+          <h2 id="tasks-heading">Tasks</h2>
+        </div>
+        <p id="taskStats" class="stats-badge" aria-live="polite"></p>
+      </div>
+
+      <div id="emptyState" class="empty-state" hidden>No tasks yet. Add one to get started.</div>
+      <ul id="taskList" class="task-list" aria-live="polite" aria-label="Task list"></ul>
+
+      <div id="celebration" class="celebration hidden" aria-live="polite">
         
-        <form id="taskForm" onsubmit="event.preventDefault(); addTask();">
-          <label for="taskInput">Task description</label>
-          <input type="text" id="taskInput" placeholder="What are you studying today?" aria-describedby="taskHelp">
-          
-          <div class="form-row">
-            <select id="priorityInput" aria-label="Task Priority">
-              <option value="low">Low Priority</option>
-              <option value="medium">Medium Priority</option>
-              <option value="high">High Priority</option>
-            </select>
-            <select id="categoryInput" aria-label="Task Category">
-              <option value="general">🌟 General</option>
-              <option value="reading">📚 Reading</option>
-              <option value="homework">✍️ Homework</option>
-              <option value="examprep">🔬 Exam Prep</option>
-              <option value="project">🎨 Project</option>
-            </select>
-            <input type="date" id="dueDateInput" aria-label="Due Date">
-          </div>
-
-          <div class="form-actions-row">
-            <button type="submit" class="btn-add">Add Task</button>
-            <button type="button" id="clearAllBtn" class="btn-clear">Clear All</button>
-          </div>
-          <p id="taskHelp" class="sr-only">Enter a task and press Add to track your study items.</p>
-        </form>
-        
-        <!-- Category Filter Tag Pill Bar -->
-        <div class="category-filters-container">
-          <span class="filters-label">Filter:</span>
-          <div id="categoryFilters" class="filter-pills">
-            <button class="filter-pill active" data-category="all">All</button>
-            <button class="filter-pill" data-category="general">🌟 General</button>
-            <button class="filter-pill" data-category="reading">📚 Reading</button>
-            <button class="filter-pill" data-category="homework">✍️ Homework</button>
-            <button class="filter-pill" data-category="examprep">🔬 Exam Prep</button>
-            <button class="filter-pill" data-category="project">🎨 Project</button>
-          </div>
-        </div>
-
-        <div class="search-container">
-          <input type="text" id="searchInput" placeholder="Search tasks..." aria-label="Search tasks">
-        </div>
-
-        <p id="errorMsg" class="error" role="alert"></p>
-
-        <ul id="taskList" aria-live="polite" aria-label="Task list"></ul>
-        
-        <div class="progress-container">
-          <div id="progressBar" class="progress-bar"></div>
-        </div>
-        <p id="taskStats"></p>
-
-        <div id="celebration" class="celebration hidden">
-          <img src="task completed image.jpg" alt="Celebration" />
-          <p>All tasks completed! 🎉</p>
-        </div>
-      </section>
-
-      <!-- Right Column: Focus Sidebar -->
-      <aside class="sidebar-col">
-        <!-- Pomodoro Focus Timer Card -->
-        <div class="glass-card pomodoro-card">
-          <h2 class="sidebar-card-title">⏱️ Focus Timer</h2>
-          <div class="pomodoro-modes">
-            <button class="mode-btn active" data-mode="study">Study</button>
-            <button class="mode-btn" data-mode="short">Short Break</button>
-            <button class="mode-btn" data-mode="long">Long Break</button>
-          </div>
-          <div class="pomodoro-timer-display">
-            <span id="timerDisplay">25:00</span>
-          </div>
-          <div class="pomodoro-controls">
-            <button id="startPauseBtn" class="timer-btn primary-btn">▶️ Start</button>
-            <button id="resetTimerBtn" class="timer-btn secondary-btn">🔁 Reset</button>
-          </div>
-        </div>
-
-        <!-- Inspiration Quotes Card -->
-        <div class="glass-card inspiration-card">
-          <h2 class="sidebar-card-title">💡 Study Inspiration</h2>
-          <div class="quote-container">
-            <p id="quoteText" class="quote-text">"Focus on being productive, not busy."</p>
-            <p id="quoteAuthor" class="quote-author">— Tim Ferriss</p>
-          </div>
-          <button id="newQuoteBtn" class="quote-btn">✨ New Inspiration</button>
-        </div>
-      </aside>
-    </div>
+        <img src="task completed image.jpg" alt="Task completed celebration" width="150" height="150">
+      </div>
+    </section>
+    
   </main>
 
   <footer class="site-footer">
-    <nav aria-label="Footer navigation">
-      <a href="#taskInput">Add task</a>
-      <a href="#taskList">View tasks</a>
+    <nav class="footer-nav" aria-label="Footer navigation">
       <a href="#main-content">Back to top</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms of Service</a>
     </nav>
-    <p>Accessible study tracking with keyboard support and semantic structure.</p>
-    <p>&copy; 2026 Study Task Tracker</p>
+    <p>&copy; 2026 Study Task Tracker | Made for students</p>
   </footer>
 
   <script src="script.js"></script>
